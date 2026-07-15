@@ -1,0 +1,13 @@
+config/config.yaml
+config/metadata_cache.json
+config/history.json
+logs/
+*.log
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+.venv/
+Downloads/
+Media/
+test_files/

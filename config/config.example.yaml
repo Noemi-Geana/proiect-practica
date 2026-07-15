@@ -1,0 +1,45 @@
+paths:
+  downloads: "Downloads"
+  media_root: "Media"
+  documents: "Media/Documents"
+  executables: "Media/Executables"
+  pictures: "Media/Pictures"
+  duplicates: "Media/Duplicates"
+  unsorted: "Media/Unsorted"
+
+subfolders:
+  movies: "Movies"
+  series: "Series"
+  music: "Music"
+
+extensions:
+  video: [".mp4", ".mkv", ".avi", ".mov", ".flv"]
+  audio: [".mp3", ".flac", ".wav", ".m4a"]
+  documents: [".pdf", ".doc", ".docx", ".odt", ".txt"]
+  executables: [".exe", ".sh", ".appimage", ".deb"]
+  archives: [".zip", ".rar", ".7z"]
+  subtitles: [".srt", ".sub"]
+  pictures: [".jpg", ".jpeg", ".png", ".gif", ".webp"]
+  incomplete: [".part", ".crdownload", ".tmp"]
+
+api:
+  omdb_key: "PUNE_AICI_CHEIA_TA"
+  omdb_url: "http://www.omdbapi.com/"
+  cache_file: "config/metadata_cache.json"
+  timeout_seconds: 5
+  max_retries: 2
+
+logging:
+  log_file: "logs/organizer.log"
+  level: "INFO"
+  max_size_mb: 5
+  backup_count: 3
+
+history:
+  history_file: "config/history.json"
+
+behavior:
+  dry_run: false
+  auto_delete_duplicates: false
+  notifications_enabled: true
+  extract_archives: true
