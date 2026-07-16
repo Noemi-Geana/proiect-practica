@@ -1,14 +1,3 @@
-"""
-notifier.py
------------
-Trimite notificari desktop pe Linux folosind 'notify-send' (parte din
-libnotify-bin, de obicei preinstalat pe majoritatea distributiilor cu GUI).
-
-Daca 'notify-send' nu exista (ex. server fara interfata grafica) sau
-notificarile sunt dezactivate din config, functiile nu fac nimic si
-NU opresc aplicatia.
-"""
-
 import shutil
 import subprocess
 
@@ -24,7 +13,7 @@ class Notifier:
             getattr(self.logger, level)(msg)
 
     def send(self, title: str, message: str, urgency: str = "normal"):
-        """urgency: 'low', 'normal' sau 'critical'"""
+        
         if not self.enabled:
             return
         if not self._available:

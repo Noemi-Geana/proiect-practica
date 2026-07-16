@@ -1,0 +1,35 @@
+{
+  "total_files_organized": 6,
+  "history_additions": [
+    {
+      "filename": "The Matrix.mkv",
+      "destination": "/home/noemi/proiect/Media/Movies/1999/The Matrix/The Matrix.mkv",
+      "timestamp": "2026-07-15T23:16:56"
+    },
+    {
+      "filename": "The Matrix.srt",
+      "destination": "/home/noemi/proiect/Media/Movies/1999/The Matrix/The Matrix.srt",
+      "timestamp": "2026-07-15T23:16:56"
+    },
+    {
+      "filename": "Breaking.Bad.S01E01.mkv",
+      "destination": "/home/noemi/proiect/Media/Series/Breaking Bad/Sezonul 01/Episodul 01/Breaking.Bad.S01E01.mkv",
+      "timestamp": "2026-07-15T23:16:56"
+    },
+    {
+      "filename": "Breaking.Bad.S01E01.srt",
+      "destination": "/home/noemi/proiect/Media/Series/Breaking Bad/Sezonul 01/Episodul 01/Breaking.Bad.S01E01.srt",
+      "timestamp": "2026-07-15T23:16:56"
+    },
+    {
+      "filename": "Yellow.mp3",
+      "destination": "/home/noemi/proiect/Media/Music/Coldplay/Yellow.mp3",
+      "timestamp": "2026-07-15T23:16:56"
+    },
+    {
+      "filename": "raport.pdf",
+      "destination": "/home/noemi/proiect/Media/Documents/raport.pdf",
+      "timestamp": "2026-07-15T23:16:56"
+    }
+  ]
+}

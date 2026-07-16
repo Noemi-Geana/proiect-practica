@@ -1,14 +1,3 @@
-"""
-metadata_api.py
----------------
-Interogheaza OMDb API pentru metadate despre filme/seriale (an, gen,
-regizor, actori, rating) si descarca poster-ul asociat.
-
-Foloseste un cache local (JSON) ca sa nu interogheze API-ul de mai
-multe ori pentru acelasi titlu. Gestioneaza erori de retea/API fara
-sa opreasca aplicatia (rate limit, lipsa conexiune, titlu negasit).
-"""
-
 import json
 import os
 import time
@@ -55,8 +44,6 @@ class MetadataAPI:
         self._last_request_time = time.time()
 
     def fetch(self, title: str, year: int | None = None) -> dict | None:
-        """Cauta metadate pentru un titlu. Foloseste cache-ul daca exista deja.
-        Returneaza None daca titlul nu a fost gasit sau API-ul e indisponibil."""
         if not self.api_key or self.api_key == "PUNE_AICI_CHEIA_TA":
             self._log("Cheia OMDb API nu este configurata. Se sare peste metadate.", "warning")
             return None
@@ -98,8 +85,7 @@ class MetadataAPI:
         return None
 
     def download_poster(self, metadata: dict, dest_dir: str) -> str | None:
-        """Descarca poster-ul (daca exista in metadate) si il salveaza ca poster.jpg
-        in directorul destinatie. Returneaza calea fisierului sau None."""
+
         poster_url = metadata.get("Poster") if metadata else None
         if not poster_url or poster_url == "N/A":
             return None
@@ -119,7 +105,7 @@ class MetadataAPI:
 
     @staticmethod
     def save_nfo(metadata: dict, dest_dir: str, filename: str = "info.json"):
-        """Salveaza metadatele complete ca fisier JSON langa fisierul media."""
+        
         if not metadata:
             return None
         os.makedirs(dest_dir, exist_ok=True)

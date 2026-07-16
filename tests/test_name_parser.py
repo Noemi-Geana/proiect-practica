@@ -1,5 +1,3 @@
-"""Teste pentru organizer.name_parser"""
-
 import os
 import sys
 
@@ -67,3 +65,20 @@ def test_parse_music_without_artist():
     result = parse_music("melodie_fara_artist.mp3")
     assert result["artist"] is None
     assert result["track"] == "Melodie Fara Artist"
+
+
+def test_diacritics_preserved_in_title():
+    result = clean_title("Amintiri.din.Copilărie.1080p.mkv")
+    assert "ă" in result.lower()
+    assert "copilărie" in result.lower()
+
+    result2 = clean_title("Război.și.Pace.1966.720p.BluRay.mkv")
+    assert "ă" in result2.lower()
+    assert "ș" in result2.lower()
+
+
+def test_diacritics_with_season_episode():
+    result = parse_series("Lăsați-mă.să.Câștig.S02E05.mkv")
+    assert result["season"] == 2
+    assert result["episode"] == 5
+    assert "ă" in result["title"].lower() or "â" in result["title"].lower()

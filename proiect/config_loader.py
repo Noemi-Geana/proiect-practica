@@ -1,11 +1,3 @@
-"""
-config_loader.py
------------------
-Incarca fisierul de configurare (config.yaml) si expune datele
-intr-un obiect usor de folosit in restul aplicatiei.
-Toate caile din config sunt expandate automat (~ -> /home/user/...).
-"""
-
 import os
 import yaml
 

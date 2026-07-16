@@ -1,27 +1,13 @@
-"""
-mover.py
---------
-Modulul central: decide unde trebuie mutat fiecare fisier si executa
-mutarea (sau doar o simuleaza, in mod dry-run).
-
-Reguli de destinatie:
-  Downloads/Movies  -> Media/Movies/<an>/<titlu>/<titlu>.<ext>
-  Downloads/Series  -> Media/<serial>/<sezon>/<episod>/<fisier>
-  Downloads/Music   -> Media/Music/<Artist>/<melodie>
-  Document (oriunde in Downloads) -> Documents/
-  Executabil        -> Executables/
-  Poza              -> Pictures/
-  Parsare esuata    -> Unsorted/
-
-Gestioneaza si coliziunile de nume (daca destinatia exista deja, adauga
-un sufix numeric in loc sa suprascrie).
-"""
-
 import os
 import shutil
 
 from proiect.classifier import FileCategory
 from proiect.name_parser import parse_movie, parse_series, parse_music
+
+
+class PathSecurityError(Exception):
+   
+    pass
 
 
 class Mover:
@@ -32,13 +18,17 @@ class Mover:
         self.stats = stats
         self.dry_run = config.behavior.get("dry_run", False)
 
+        # radacinile permise pentru orice mutare: doar folderele definite explicit in config.
+        # orice destinatie calculata TREBUIE sa se afle in interiorul uneia dintre ele.
+        self._allowed_roots = [os.path.abspath(p) for p in config.paths.values()]
+
     def _log(self, msg, level="info"):
         if self.logger:
             getattr(self.logger, level)(msg)
 
     @staticmethod
     def _unique_destination(dest_path: str) -> str:
-        """Daca dest_path exista deja, adauga _1, _2, etc. inainte de extensie."""
+    
         if not os.path.exists(dest_path):
             return dest_path
         base, ext = os.path.splitext(dest_path)
@@ -49,8 +39,30 @@ class Mover:
             new_path = f"{base}_{counter}{ext}"
         return new_path
 
+    def _is_within_allowed_roots(self, path: str) -> bool:
+        
+        resolved = os.path.abspath(path)
+        for root in self._allowed_roots:
+            try:
+                if os.path.commonpath([resolved, root]) == root:
+                    return True
+            except ValueError:
+                # poate aparea pe Windows la unitati de disc diferite; pe Linux e rar
+                continue
+        return False
+
     def _do_move(self, src: str, dest: str) -> str:
-        """Executa (sau simuleaza) mutarea efectiva, gestionand coliziuni."""
+
+        if not self._is_within_allowed_roots(dest):
+            msg = (
+                f"Destinatie respinsa (in afara folderelor permise, posibil path traversal): "
+                f"'{dest}'"
+            )
+            self._log(msg, "error")
+            if self.stats:
+                self.stats.increment("errors")
+            raise PathSecurityError(msg)
+
         dest = self._unique_destination(dest)
 
         if self.dry_run:
@@ -65,6 +77,7 @@ class Mover:
             self.history.record_move(src, dest)
         if self.stats:
             self.stats.increment("moved")
+            self.stats.record_addition(os.path.basename(dest), dest)
         return dest
 
     # --- Reguli specifice fiecarui tip de continut din Downloads ---
@@ -135,6 +148,53 @@ class Mover:
         dest_dir = self.config.paths["pictures"]
         dest_path = os.path.join(dest_dir, filename)
         return self._do_move(filepath, dest_path)
+
+    def has_companion_video(self, subtitle_path: str, video_extensions: list) -> bool:
+       
+        sub_dir = os.path.dirname(subtitle_path)
+        sub_stem = os.path.splitext(os.path.basename(subtitle_path))[0].lower()
+
+        if not os.path.isdir(sub_dir):
+            return False
+
+        for name in os.listdir(sub_dir):
+            ext = os.path.splitext(name)[1].lower()
+            if ext not in video_extensions:
+                continue
+            video_stem = os.path.splitext(name)[0].lower()
+            if sub_stem == video_stem or sub_stem.startswith(video_stem):
+                return True
+        return False
+
+    def find_matching_subtitle(self, video_path: str, subtitle_extensions: list) -> str | None:
+      
+        video_dir = os.path.dirname(video_path)
+        video_stem = os.path.splitext(os.path.basename(video_path))[0].lower()
+
+        if not os.path.isdir(video_dir):
+            return None
+
+        for name in os.listdir(video_dir):
+            ext = os.path.splitext(name)[1].lower()
+            if ext not in subtitle_extensions:
+                continue
+            sub_stem = os.path.splitext(name)[0].lower()
+            # potrivire exacta SAU numele subtitrarii incepe cu numele video-ului
+            # (acopera cazul "Film.ro.srt" pentru "Film.mkv")
+            if sub_stem == video_stem or sub_stem.startswith(video_stem):
+                return os.path.join(video_dir, name)
+        return None
+
+    def move_subtitle_alongside(self, subtitle_path: str, video_dest_path: str) -> str:
+       
+        sub_ext = os.path.splitext(subtitle_path)[1]
+        video_dest_dir = os.path.dirname(video_dest_path)
+        video_dest_stem = os.path.splitext(os.path.basename(video_dest_path))[0]
+
+        dest_path = os.path.join(video_dest_dir, f"{video_dest_stem}{sub_ext}")
+        result = self._do_move(subtitle_path, dest_path)
+        self._log(f"Subtitrare asociata mutata alaturi de video: '{result}'")
+        return result
 
     def move_to_duplicates(self, filepath: str) -> str:
         filename = os.path.basename(filepath)

@@ -1,12 +1,3 @@
-"""
-watcher.py
-----------
-Monitorizeaza continuu folderul Downloads folosind 'watchdog' si declanseaza
-organizarea automata de fiecare data cand apare un fisier nou (sau se
-termina o descarcare, adica fisierul e redenumit din .part/.crdownload
-in extensia finala).
-"""
-
 import time
 
 from watchdog.events import FileSystemEventHandler
@@ -15,11 +6,7 @@ from watchdog.observers import Observer
 
 class DownloadsHandler(FileSystemEventHandler):
     def __init__(self, process_callback, logger=None, settle_seconds: float = 2.0):
-        """
-        process_callback: functie apelata cu (filepath) pentru fiecare fisier nou/redenumit.
-        settle_seconds: cat asteapta dupa ultimul eveniment inainte sa proceseze fisierul,
-                        ca sa fie sigur ca descarcarea s-a terminat complet.
-        """
+       
         self.process_callback = process_callback
         self.logger = logger
         self.settle_seconds = settle_seconds
@@ -49,8 +36,7 @@ class DownloadsHandler(FileSystemEventHandler):
 
 
 def start_watching(paths_to_watch: list, process_callback, logger=None):
-    """Porneste monitorizarea (blocant) pentru lista de directoare date.
-    Se opreste la Ctrl+C."""
+    
     handler = DownloadsHandler(process_callback, logger=logger)
     observer = Observer()
 

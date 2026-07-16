@@ -1,11 +1,3 @@
-"""
-history.py
-----------
-Pastreaza un istoric al mutarilor efectuate (sursa -> destinatie), salvat
-intr-un fisier JSON, astfel incat utilizatorul sa poata anula (undo)
-ultima rulare sau o mutare specifica, daca a fost o greseala.
-"""
-
 import json
 import os
 from datetime import datetime
@@ -44,8 +36,7 @@ class History:
         self._save()
 
     def last_run_entries(self) -> list:
-        """Returneaza mutarile din ultima 'sesiune' (grupate dupa cel mai recent timestamp
-        aflat la mai putin de 5 minute distanta de ultima intrare)."""
+        
         if not self._entries:
             return []
         last_time = datetime.fromisoformat(self._entries[-1]["timestamp"])
@@ -58,8 +49,7 @@ class History:
         return list(reversed(result))
 
     def undo_last_run(self) -> tuple[int, int]:
-        """Muta inapoi fisierele din ultima rulare, la locatia originala.
-        Returneaza (numar_reusite, numar_esuate)."""
+        
         entries = self.last_run_entries()
         success, failed = 0, 0
 

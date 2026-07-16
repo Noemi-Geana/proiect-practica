@@ -1,20 +1,3 @@
-"""
-main.py
--------
-Punctul de intrare al aplicatiei. Leaga toate modulele:
-  config -> logger -> classifier -> duplicates -> archive_handler
-  -> name_parser (folosit intern de mover) -> metadata_api -> mover
-  -> stats -> history -> notifier -> (optional) watcher
-
-Utilizare:
-    python3 main.py                      # ruleaza o data, organizeaza Downloads
-    python3 main.py --dry-run            # simuleaza, nu muta nimic
-    python3 main.py --watch              # monitorizeaza continuu Downloads
-    python3 main.py --undo               # anuleaza ultima rulare
-    python3 main.py --interactive        # cere confirmare inainte de fiecare mutare
-    python3 main.py --config alt.yaml    # foloseste alt fisier de configurare
-"""
-
 import argparse
 import os
 import sys
@@ -33,8 +16,7 @@ from proiect.stats import Stats
 
 
 class OrganizerContext:
-    """Grupeaza toate componentele aplicatiei, ca sa nu trecem 8 parametri
-    separati intre functii."""
+   
 
     def __init__(self, config_path: str, dry_run: bool = False, interactive: bool = False):
         self.config = Config(config_path)
@@ -43,7 +25,7 @@ class OrganizerContext:
 
         self.config.ensure_directories()
         self.logger = setup_logger(self.config)
-        self.stats = Stats()
+        self.stats = Stats(self.config)
         self.history = History(self.config, self.logger)
         self.classifier = FileClassifier(self.config, self.logger)
         self.duplicates = DuplicateDetector(self.config, self.logger)
@@ -64,7 +46,7 @@ class OrganizerContext:
 
 
 def fetch_and_save_metadata(ctx: OrganizerContext, filename: str, dest_path: str, is_series: bool):
-    """Dupa mutarea unui film/episod, incearca sa obtina metadate si poster."""
+
     if ctx.config.behavior.get("dry_run", False):
         return  # nu interogam API-ul in simulare
 
@@ -80,7 +62,7 @@ def fetch_and_save_metadata(ctx: OrganizerContext, filename: str, dest_path: str
 
 
 def process_file(ctx: OrganizerContext, filepath: str, source_folder: str):
-    """Proceseaza un singur fisier: clasificare -> duplicat? -> arhiva? -> mutare -> metadate."""
+    
     filename = os.path.basename(filepath)
 
     if not os.path.isfile(filepath):
@@ -92,6 +74,12 @@ def process_file(ctx: OrganizerContext, filepath: str, source_folder: str):
         ctx.logger.info(f"Fișier incomplet, ignorat: {filename}")
         ctx.stats.increment("skipped_incomplete")
         return
+
+    if category == FileCategory.SUBTITLE:
+        video_extensions = ctx.config.extensions.get("video", [])
+        if ctx.mover.has_companion_video(filepath, video_extensions):
+            ctx.logger.info(f"Subtitrare '{filename}' amânată — va fi asociată cu videoclipul ei")
+            return
 
     # arhive: extragem continutul, apoi procesam recursiv fisierele extrase
     if category == FileCategory.ARCHIVE:
@@ -125,7 +113,17 @@ def process_file(ctx: OrganizerContext, filepath: str, source_folder: str):
         ctx.logger.info(f"Mutare anulată de utilizator pentru: {filename}")
         return
 
+    # inainte de mutarea video-ului, cautam o subtitrare asociata in acelasi folder
+    subtitle_path = None
+    if category == FileCategory.VIDEO:
+        subtitle_extensions = ctx.config.extensions.get("subtitles", [])
+        subtitle_path = ctx.mover.find_matching_subtitle(filepath, subtitle_extensions)
+
     dest_path = ctx.mover.route(filepath, category, source_folder)
+
+    # daca am gasit o subtitrare asociata, o mutam alaturi de video, la noua locatie
+    if subtitle_path and dest_path:
+        ctx.mover.move_subtitle_alongside(subtitle_path, dest_path)
 
     # dupa mutare, daca e film/serial, incercam sa obtinem metadate
     if dest_path and category == FileCategory.VIDEO and source_folder in ("movies", "series"):
@@ -133,8 +131,7 @@ def process_file(ctx: OrganizerContext, filepath: str, source_folder: str):
 
 
 def process_downloads(ctx: OrganizerContext):
-    """Scaneaza structura Downloads/Movies, Downloads/Series, Downloads/Music
-    si radacina Downloads, procesand fiecare fisier gasit."""
+
     downloads_root = ctx.config.paths["downloads"]
 
     subfolder_map = {
@@ -175,7 +172,6 @@ def process_downloads(ctx: OrganizerContext):
 
 
 def cleanup_empty_folders(ctx: OrganizerContext, root: str):
-    """Sterge folderele goale ramase in Downloads dupa mutarea fisierelor."""
     if ctx.config.behavior.get("dry_run", False):
         return
     for dirpath, dirnames, filenames in os.walk(root, topdown=False):
@@ -195,6 +191,12 @@ def run_once(ctx: OrganizerContext):
     summary = ctx.stats.summary_text()
     ctx.logger.info(summary)
     print("\n" + summary)
+
+    global_summary = ctx.stats.global_summary_text(ctx.config)
+    ctx.logger.info(global_summary)
+    print("\n" + global_summary)
+    ctx.stats.save_global()
+
     ctx.notifier.notify_summary(
         moved=ctx.stats.get("moved"),
         errors=ctx.stats.get("errors"),

@@ -1,10 +1,3 @@
-"""
-logger.py
----------
-Configureaza logging-ul aplicatiei: scriere in fisier cu rotatie automata
-(ca sa nu creasca la infinit) + afisare in consola.
-"""
-
 import logging
 import os
 from logging.handlers import RotatingFileHandler

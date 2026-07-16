@@ -1,5 +1,3 @@
-"""Teste pentru organizer.classifier"""
-
 import os
 import sys
 

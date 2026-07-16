@@ -1,17 +1,3 @@
-"""
-name_parser.py
---------------
-Extrage informatii utile din numele fisierelor descarcate:
-  - titlu curat (fara "zgomot" gen 1080p, x264, WEB-DL, nume grup de release)
-  - an aparitie (pentru filme)
-  - sezon si episod (pentru seriale), suportand mai multe formate:
-      S01E02 , 1x02 , Season 1 Episode 2
-
-Daca parsarea esueaza (nu se poate identifica un tipar cunoscut),
-functiile returneaza None pentru campurile respective, iar apelantul
-(mover.py) decide sa mute fisierul in Unsorted/NeedsReview.
-"""
-
 import re
 
 # Cuvinte/etichete tehnice frecvente in numele fisierelor de release,
@@ -51,8 +37,7 @@ def extract_season_episode(filename: str) -> tuple[int, int] | None:
 
 
 def clean_title(filename: str) -> str:
-    """Elimina extensia, anul, sezon/episod si etichetele tehnice,
-    lasand doar titlul (aproximativ) curat."""
+    
     name = re.sub(r"\.[a-zA-Z0-9]{2,4}$", "", filename)  # scoate extensia
 
     # scoate marcajul de sezon/episod
@@ -71,7 +56,7 @@ def clean_title(filename: str) -> str:
 
 
 def parse_movie(filename: str) -> dict:
-    """Returneaza {'title': ..., 'year': ... sau None}"""
+   
     return {
         "title": clean_title(filename),
         "year": extract_year(filename),
@@ -79,7 +64,7 @@ def parse_movie(filename: str) -> dict:
 
 
 def parse_series(filename: str) -> dict:
-    """Returneaza {'title':..., 'season': ... sau None, 'episode': ... sau None}"""
+    
     se = extract_season_episode(filename)
     return {
         "title": clean_title(filename),
@@ -94,8 +79,7 @@ def _normalize_spacing(text: str) -> str:
 
 
 def parse_music(filename: str) -> dict:
-    """Incearca sa separe 'Artist - Melodie.ext'. Daca nu gaseste separatorul,
-    returneaza artist=None si intregul nume ca titlu."""
+   
     name = re.sub(r"\.[a-zA-Z0-9]{2,4}$", "", filename)
     name = _normalize_spacing(name)
     parts = re.split(r"\s*-\s*", name, maxsplit=1)
