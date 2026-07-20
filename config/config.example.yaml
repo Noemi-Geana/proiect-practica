@@ -1,11 +1,11 @@
 paths:
-  downloads: "~/Downloads"
-  media_root: "~/Media"
-  documents: "~/Media/Documents"
-  executables: "~/Media/Executables"
-  pictures: "~/Media/Pictures"
-  duplicates: "~/Media/Duplicates"
-  unsorted: "~/Media/Unsorted"
+  downloads: "Downloads"
+  media_root: "Media"
+  documents: "Media/Documents"
+  executables: "Media/Executables"
+  pictures: "Media/Pictures"
+  duplicates: "Media/Duplicates"
+  unsorted: "Media/Unsorted"
 
 subfolders:
   movies: "Movies"
@@ -13,21 +13,21 @@ subfolders:
   music: "Music"
 
 extensions:
-  video: [".mp4", ".mkv", ".avi", ".mov", ".flv", ".wmv"]
-  audio: [".mp3", ".flac", ".wav", ".m4a", ".aac", ".ogg"]
-  documents: [".pdf", ".doc", ".docx", ".odt", ".txt", ".xls", ".xlsx", ".ppt", ".pptx"]
-  executables: [".exe", ".sh", ".appimage", ".deb", ".run", ".bin"]
-  archives: [".zip", ".rar", ".7z", ".tar", ".gz"]
-  subtitles: [".srt", ".sub", ".ass"]
-  pictures: [".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp"]
-  incomplete: [".part", ".crdownload", ".tmp", ".download"]
+  video: [".mp4", ".mkv", ".avi", ".mov", ".flv"]
+  audio: [".mp3", ".flac", ".wav", ".m4a"]
+  documents: [".pdf", ".doc", ".docx", ".odt", ".txt"]
+  executables: [".exe", ".sh", ".appimage", ".deb"]
+  archives: [".zip", ".rar", ".7z"]
+  subtitles: [".srt", ".sub"]
+  pictures: [".jpg", ".jpeg", ".png", ".gif", ".webp"]
+  incomplete: [".part", ".crdownload", ".tmp"]
 
 api:
   omdb_key: "PUNE_AICI_CHEIA_TA"
   omdb_url: "http://www.omdbapi.com/"
+  tmdb_key: ""
   cache_file: "config/metadata_cache.json"
-  timeout_seconds: 5
-  max_retries: 2
+  language: "en-US"
 
 logging:
   log_file: "logs/organizer.log"
@@ -40,6 +40,15 @@ history:
 
 stats:
   stats_file: "config/stats.json"
+
+naming:
+  movie_folder: "{title}"
+  movie_file: "{title}"
+  series_file: "{title} S{season:02d}E{episode:02d}"
+  music_file: "{artist} - {track}"
+
+media_locations:
+  extra_roots: []
 
 behavior:
   dry_run: false

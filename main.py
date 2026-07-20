@@ -16,13 +16,10 @@ from proiect.stats import Stats
 
 
 class OrganizerContext:
-   
-
     def __init__(self, config_path: str, dry_run: bool = False, interactive: bool = False):
         self.config = Config(config_path)
         if dry_run:
             self.config._data["behavior"]["dry_run"] = True
-
         self.config.ensure_directories()
         self.logger = setup_logger(self.config)
         self.stats = Stats(self.config)
@@ -46,7 +43,6 @@ class OrganizerContext:
 
 
 def fetch_and_save_metadata(ctx: OrganizerContext, filename: str, dest_path: str, is_series: bool):
-
     if ctx.config.behavior.get("dry_run", False):
         return  # nu interogam API-ul in simulare
 
@@ -55,6 +51,7 @@ def fetch_and_save_metadata(ctx: OrganizerContext, filename: str, dest_path: str
     year = info.get("year") if not is_series else None
 
     metadata = ctx.metadata_api.fetch(title, year)
+
     if metadata:
         dest_dir = os.path.dirname(dest_path)
         ctx.metadata_api.download_poster(metadata, dest_dir)
@@ -62,7 +59,6 @@ def fetch_and_save_metadata(ctx: OrganizerContext, filename: str, dest_path: str
 
 
 def process_file(ctx: OrganizerContext, filepath: str, source_folder: str):
-    
     filename = os.path.basename(filepath)
 
     if not os.path.isfile(filepath):
@@ -103,11 +99,11 @@ def process_file(ctx: OrganizerContext, filepath: str, source_folder: str):
                         os.remove(filepath)
                     ctx.logger.info(f"Duplicat șters: {filename}")
                     ctx.stats.increment("duplicates")
-                    return
+                return
             else:
                 if ctx.confirm(f"Muți duplicatul '{filename}' în Duplicates/?"):
                     ctx.mover.move_to_duplicates(filepath)
-                    return
+                return
 
     if not ctx.confirm(f"Muți '{filename}' (categorie: {category})?"):
         ctx.logger.info(f"Mutare anulată de utilizator pentru: {filename}")
@@ -131,9 +127,7 @@ def process_file(ctx: OrganizerContext, filepath: str, source_folder: str):
 
 
 def process_downloads(ctx: OrganizerContext):
-
     downloads_root = ctx.config.paths["downloads"]
-
     subfolder_map = {
         "Movies": "movies",
         "Series": "series",
@@ -149,6 +143,7 @@ def process_downloads(ctx: OrganizerContext):
         folder_path = os.path.join(downloads_root, folder_name)
         if not os.path.isdir(folder_path):
             continue
+
         for name in os.listdir(folder_path):
             full_path = os.path.join(folder_path, name)
             try:
@@ -162,6 +157,7 @@ def process_downloads(ctx: OrganizerContext):
         full_path = os.path.join(downloads_root, name)
         if os.path.isdir(full_path):
             continue  # Movies/Series/Music deja procesate mai sus
+
         try:
             process_file(ctx, full_path, "root")
         except Exception as e:
@@ -174,6 +170,7 @@ def process_downloads(ctx: OrganizerContext):
 def cleanup_empty_folders(ctx: OrganizerContext, root: str):
     if ctx.config.behavior.get("dry_run", False):
         return
+
     for dirpath, dirnames, filenames in os.walk(root, topdown=False):
         if dirpath == root:
             continue
@@ -187,7 +184,32 @@ def cleanup_empty_folders(ctx: OrganizerContext, root: str):
 
 def run_once(ctx: OrganizerContext):
     ctx.logger.info("=== Pornire organizare Downloads ===")
-    process_downloads(ctx)
+
+    try:
+        from tqdm import tqdm
+        files_to_process = []
+        downloads_root = ctx.config.paths["downloads"]
+
+        # colectez toate fisierele inainte de procesare
+        for root, dirs, files in os.walk(downloads_root):
+            for name in files:
+                files_to_process.append(os.path.join(root, name))
+
+        # procesez cu progress bar
+        for filepath in tqdm(files_to_process, desc="Organizare fișiere", unit="fișier"):
+            try:
+                rel = os.path.relpath(filepath, downloads_root)
+                parts = rel.split(os.sep)
+                mapping = {"Movies": "movies", "Series": "series", "Music": "music"}
+                source_folder = mapping.get(parts[0], "root") if len(parts) > 1 else "root"
+                process_file(ctx, filepath, source_folder)
+            except Exception as e:
+                ctx.logger.error(f"Eroare la procesarea '{filepath}': {e}")
+                ctx.stats.increment("errors")
+    except ImportError:
+        # fallback daca tqdm nu e disponibil
+        process_downloads(ctx)
+
     summary = ctx.stats.summary_text()
     ctx.logger.info(summary)
     print("\n" + summary)
@@ -195,6 +217,7 @@ def run_once(ctx: OrganizerContext):
     global_summary = ctx.stats.global_summary_text(ctx.config)
     ctx.logger.info(global_summary)
     print("\n" + global_summary)
+
     ctx.stats.save_global()
 
     ctx.notifier.notify_summary(
@@ -216,6 +239,7 @@ def run_watch(ctx: OrganizerContext):
         parts = rel.split(os.sep)
         mapping = {"Movies": "movies", "Series": "series", "Music": "music"}
         source_folder = mapping.get(parts[0], "root") if len(parts) > 1 else "root"
+
         process_file(ctx, filepath, source_folder)
 
     start_watching(watch_paths, callback, logger=ctx.logger)

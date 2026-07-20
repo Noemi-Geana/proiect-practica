@@ -98,7 +98,7 @@ class Stats:
         return f"{size:.1f} PB"
 
     def disk_usage_by_category(self, config) -> dict:
-       
+        """Returneaza {categorie: 'X.X MB'} pentru fiecare folder relevant din Media/."""
         paths = config.paths
         media_root = paths.get("media_root", "")
         subfolders = config.subfolders
@@ -125,7 +125,7 @@ class Stats:
             f"  - Duplicate găsite:        {c['duplicates']}\n"
             f"  - Nesortate (Unsorted):    {c['unsorted']}\n"
             f"  - Ignorate (incomplete):   {c['skipped_incomplete']}\n"
-            f"  - Erori:                  {c['errors']}"
+            f"  - Erori:                   {c['errors']}"
         )
 
     def global_summary_text(self, config) -> str:
@@ -134,7 +134,7 @@ class Stats:
         recent = self.recent_additions(5)
         recent_lines = "\n".join(
             f"    - {r['timestamp']}: {r['filename']}" for r in recent
-        ) or 
+        ) or "    (nicio adaugare in aceasta rulare)"
 
         return (
             f"Statistici globale (cumulat, toate rularile):\n"

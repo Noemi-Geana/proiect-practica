@@ -61,6 +61,14 @@ class Config:
     def behavior(self) -> dict:
         return self._data.get("behavior", {})
 
+    @property
+    def naming(self) -> dict:
+        return self._data.get("naming", {})
+
+    @property
+    def media_locations(self) -> dict:
+        return self._data.get("media_locations", {})
+
     def get(self, *keys, default=None):
         """Acces generic: config.get('api', 'omdb_key')"""
         node = self._data

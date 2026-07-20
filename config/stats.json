@@ -1,5 +1,5 @@
 {
-  "total_files_organized": 6,
+  "total_files_organized": 34,
   "history_additions": [
     {
       "filename": "The Matrix.mkv",
@@ -30,6 +30,146 @@
       "filename": "raport.pdf",
       "destination": "/home/noemi/proiect/Media/Documents/raport.pdf",
       "timestamp": "2026-07-15T23:16:56"
+    },
+    {
+      "filename": "raport.pdf",
+      "destination": "/home/noemi/proiect/Media/Documents/raport.pdf",
+      "timestamp": "2026-07-20T11:32:47"
+    },
+    {
+      "filename": "Breaking.Bad.S01E01.mkv",
+      "destination": "/home/noemi/proiect/Media/Series/Breaking Bad/Sezonul 01/Episodul 01/Breaking.Bad.S01E01.mkv",
+      "timestamp": "2026-07-20T11:32:47"
+    },
+    {
+      "filename": "Breaking.Bad.S01E01.srt",
+      "destination": "/home/noemi/proiect/Media/Series/Breaking Bad/Sezonul 01/Episodul 01/Breaking.Bad.S01E01.srt",
+      "timestamp": "2026-07-20T11:32:47"
+    },
+    {
+      "filename": "The Matrix.mkv",
+      "destination": "/home/noemi/proiect/Media/Movies/1999/The Matrix/The Matrix.mkv",
+      "timestamp": "2026-07-20T11:32:47"
+    },
+    {
+      "filename": "The Matrix.srt",
+      "destination": "/home/noemi/proiect/Media/Movies/1999/The Matrix/The Matrix.srt",
+      "timestamp": "2026-07-20T11:32:47"
+    },
+    {
+      "filename": "Yellow.mp3",
+      "destination": "/home/noemi/proiect/Media/Music/Coldplay/Yellow.mp3",
+      "timestamp": "2026-07-20T11:32:47"
+    },
+    {
+      "filename": "raport.pdf",
+      "destination": "/home/noemi/proiect/Media/Documents/raport.pdf",
+      "timestamp": "2026-07-20T11:46:42"
+    },
+    {
+      "filename": "Breaking.Bad.S01E01.mkv",
+      "destination": "/home/noemi/proiect/Media/Series/Breaking Bad/Sezonul 01/Episodul 01/Breaking.Bad.S01E01.mkv",
+      "timestamp": "2026-07-20T11:46:42"
+    },
+    {
+      "filename": "Breaking.Bad.S01E01.srt",
+      "destination": "/home/noemi/proiect/Media/Series/Breaking Bad/Sezonul 01/Episodul 01/Breaking.Bad.S01E01.srt",
+      "timestamp": "2026-07-20T11:46:42"
+    },
+    {
+      "filename": "The Matrix.mkv",
+      "destination": "/home/noemi/proiect/Media/Movies/1999/The Matrix/The Matrix.mkv",
+      "timestamp": "2026-07-20T11:46:42"
+    },
+    {
+      "filename": "The Matrix.srt",
+      "destination": "/home/noemi/proiect/Media/Movies/1999/The Matrix/The Matrix.srt",
+      "timestamp": "2026-07-20T11:46:42"
+    },
+    {
+      "filename": "Yellow.mp3",
+      "destination": "/home/noemi/proiect/Media/Music/Coldplay/Yellow.mp3",
+      "timestamp": "2026-07-20T11:46:42"
+    },
+    {
+      "filename": "document.pdf",
+      "destination": "/home/noemi/proiect/Media/Documents/document.pdf",
+      "timestamp": "2026-07-20T11:54:01"
+    },
+    {
+      "filename": "photo.jpg",
+      "destination": "/home/noemi/proiect/Media/Pictures/photo.jpg",
+      "timestamp": "2026-07-20T11:54:01"
+    },
+    {
+      "filename": "Breaking.Bad.S01E01.mkv",
+      "destination": "/home/noemi/proiect/Media/Duplicates/Breaking.Bad.S01E01.mkv",
+      "timestamp": "2026-07-20T11:54:01"
+    },
+    {
+      "filename": "Avatar.2009.mkv",
+      "destination": "/home/noemi/proiect/Media/Duplicates/Avatar.2009.mkv",
+      "timestamp": "2026-07-20T11:54:01"
+    },
+    {
+      "filename": "The.Matrix.2023.1080p.mkv",
+      "destination": "/home/noemi/proiect/Media/Duplicates/The.Matrix.2023.1080p.mkv",
+      "timestamp": "2026-07-20T11:54:01"
+    },
+    {
+      "filename": "Artist-Song.mp3",
+      "destination": "/home/noemi/proiect/Media/Duplicates/Artist-Song.mp3",
+      "timestamp": "2026-07-20T11:54:01"
+    },
+    {
+      "filename": "document.pdf",
+      "destination": "/home/noemi/proiect/Media/Documents/document.pdf",
+      "timestamp": "2026-07-20T11:58:30"
+    },
+    {
+      "filename": "photo.jpg",
+      "destination": "/home/noemi/proiect/Media/Duplicates/photo.jpg",
+      "timestamp": "2026-07-20T11:58:30"
+    },
+    {
+      "filename": "Breaking.Bad.S01E01.mkv",
+      "destination": "/home/noemi/proiect/Media/Duplicates/Breaking.Bad.S01E01.mkv",
+      "timestamp": "2026-07-20T11:58:30"
+    },
+    {
+      "filename": "Avatar.2009.mkv",
+      "destination": "/home/noemi/proiect/Media/Duplicates/Avatar.2009.mkv",
+      "timestamp": "2026-07-20T11:58:30"
+    },
+    {
+      "filename": "The.Matrix.2023.1080p.mkv",
+      "destination": "/home/noemi/proiect/Media/Duplicates/The.Matrix.2023.1080p.mkv",
+      "timestamp": "2026-07-20T11:58:30"
+    },
+    {
+      "filename": "Artist-Song.mp3",
+      "destination": "/home/noemi/proiect/Media/Duplicates/Artist-Song.mp3",
+      "timestamp": "2026-07-20T11:58:30"
+    },
+    {
+      "filename": "The.Matrix.srt",
+      "destination": "/home/noemi/proiect/Media/Unsorted/The.Matrix.srt",
+      "timestamp": "2026-07-20T19:23:00"
+    },
+    {
+      "filename": "The.Matrix.2023.mkv",
+      "destination": "/home/noemi/proiect/Media/Duplicates/The.Matrix.2023.mkv",
+      "timestamp": "2026-07-20T19:23:03"
+    },
+    {
+      "filename": "The.Matrix.srt",
+      "destination": "/home/noemi/proiect/Media/Unsorted/The.Matrix.srt",
+      "timestamp": "2026-07-20T19:23:51"
+    },
+    {
+      "filename": "The.Matrix.2023.mkv",
+      "destination": "/home/noemi/proiect/Media/Duplicates/The.Matrix.2023.mkv",
+      "timestamp": "2026-07-20T19:23:51"
     }
   ]
 }
