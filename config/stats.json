@@ -1,5 +1,5 @@
 {
-  "total_files_organized": 34,
+  "total_files_organized": 38,
   "history_additions": [
     {
       "filename": "The Matrix.mkv",
@@ -170,6 +170,26 @@
       "filename": "The.Matrix.2023.mkv",
       "destination": "/home/noemi/proiect/Media/Duplicates/The.Matrix.2023.mkv",
       "timestamp": "2026-07-20T19:23:51"
+    },
+    {
+      "filename": "The.Matrix.srt",
+      "destination": "/home/noemi/proiect/Media/Unsorted/The.Matrix.srt",
+      "timestamp": "2026-07-23T00:00:37"
+    },
+    {
+      "filename": "The.Matrix.2023.mkv",
+      "destination": "/home/noemi/proiect/Media/Duplicates/The.Matrix.2023.mkv",
+      "timestamp": "2026-07-23T00:00:37"
+    },
+    {
+      "filename": "The.Matrix.srt",
+      "destination": "/home/noemi/proiect/Media/Unsorted/The.Matrix.srt",
+      "timestamp": "2026-07-23T00:02:20"
+    },
+    {
+      "filename": "The.Matrix.2023.mkv",
+      "destination": "/home/noemi/proiect/Media/Duplicates/The.Matrix.2023.mkv",
+      "timestamp": "2026-07-23T00:02:20"
     }
   ]
 }
